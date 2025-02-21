@@ -1,0 +1,30 @@
+node.js가 19버전되면서 crd사용이 불가능해져서 vite를 사용한다.
+https://ko.vite.dev/guide/에서 사용법 참고.
+초기에 module 등이 없어서 가볍고 빠르다.
+
+ㅇ설치
+npm create vite@latest
+y
+board-front (프로젝트명)
+react 선택
+ javascript+swc 선택
+프로젝트 들어간 뒤 npm install
+npm install react-router-dom recoil @tanstack/react-query @emotion/react axios
+react recoil 충돌로 다운그레이드
+npm install react@18
+npm install react-dom@18
+
+
+ㅇ서버 실행
+npm run dev
+
+
+index.jsx가 main.jsx로 변경.
+
+
+
+ㅇ
+npm install react-icons
+
+확장프로그램 VSCode Color Picker
+
