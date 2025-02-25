@@ -37,6 +37,7 @@ export const textInput = css`
     width: 100%;
     height: 3.4rem;
     background-color: transparent;
+
     font-size: 1.4rem;
     letter-spacing: 0.1rem;
 

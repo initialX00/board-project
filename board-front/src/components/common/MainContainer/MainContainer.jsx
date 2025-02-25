@@ -17,7 +17,7 @@ function MainContainer({ children }) {
         <div css={s.container}>
             <header css={s.header}>
                 {
-                    !isOpen &&
+                    !isOpen && 
                     <span css={s.sidebarOpenButton}>
                         <button css={basicButton} onClick={handleSidebarOpen}><FiChevronsRight /></button>
                     </span>

@@ -3,20 +3,24 @@ import * as s from './style';
 import React, { useState } from 'react';
 
 function ValidInput({
-    type, 
-    name, 
-    placeholder, 
+    type = "text", 
+    name = "", 
+    placeholder = "", 
     value, 
-    onChange,
+    onChange = null,
     onFocus = null,
-    regexp, 
-    errorMessage,
-    inputValidError,
-    setinputValidError,
+    regexp = null, 
+    errorMessage = "",
+    inputValidError = null,
+    setInputValidError = null
 }) {
     
     const handleOnBlur = () => {
-        setinputValidError(prev => ({
+        if(!regexp) {
+            return;
+        }
+
+        setInputValidError(prev => ({
             ...prev,
             [name]: !regexp.test(value),
         }));
@@ -26,19 +30,20 @@ function ValidInput({
     return (
         <div css={s.groupBox}>
             <input css={s.textInput} 
-            type={type} 
-            name={name}
-            placeholder={placeholder}
-            value={value}
-            onChange={onChange} 
-            onFocus={onFocus}
-            onBlur={handleOnBlur} />
-        {
-            !!inputValidError[name] &&
-            <p css={s.messageText}>{errorMessage}</p>
-        }
+                type={type} 
+                name={name}
+                placeholder={placeholder}
+                value={value}
+                onChange={onChange} 
+                onFocus={onFocus}
+                onBlur={handleOnBlur}
+            />
+            {
+                !!inputValidError &&
+                !!inputValidError[name] &&
+                <p css={s.messageText}>{errorMessage}</p>
+            }
         </div>
-
     );
 }
 

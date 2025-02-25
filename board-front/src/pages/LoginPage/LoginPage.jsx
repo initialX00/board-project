@@ -1,10 +1,60 @@
 /**@jsxImportSource @emotion/react */
 import * as s from './style';
-import React from 'react';
+import React, { useState } from 'react';
 import { SiGoogle, SiKakao, SiNaver } from "react-icons/si";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLoginMutation } from '../../mutations/authMutation';
+import Swal from 'sweetalert2';
+import { setTokenLocalStorage } from '../../configs/axiosConfig';
+import { useUserMeQuery } from '../../queries/userQuery';
 
 function LoginPage(props) {
+    const navigate = useNavigate();
+    const loginMutation = useLoginMutation();
+    const loginUser = useUserMeQuery();
+
+    const [ searchParams, setSearchParams ] = useSearchParams();
+    //console.log(searchParams.get("username"));
+
+    const [ inputValue, setInputValue ] = useState({
+        username: searchParams.get("username") || "",
+        password: ""
+    }); 
+
+    const handleInputOnChange = (e) => {
+        setInputValue(prev => ({
+            ...prev,
+            [e.target.name]: e.target.value,
+        }));
+    }
+
+    const handleLoginOnClick = async () => {
+        try {
+            const response = await loginMutation.mutateAsync(inputValue);
+            const tokenName = response.data.name;
+            const accessToken = response.data.token;
+            setTokenLocalStorage(tokenName, accessToken);
+            //console.log(response.data);
+            await Swal.fire({ //Swal : 알럿창 스타일인터페이스
+                position: "center",
+                icon: "success",
+                title: "로그인 성공",
+                showConfirmButton: false,
+                timer: 1000,
+                //원하는 레이어 안에 띄우기 target: 
+            });
+            loginUser.refetch();
+            navigate("/");
+        } catch(error) {
+            await Swal.fire({ //promise라서 비동기이다
+                title: '로그인실패',
+                text: '사용자 정보를 다시 확인해주세요.',
+                confirmButtonText: '확인',
+                confirmButtonColor: "#e22323",
+            });
+        }
+    }
+
     return (
         <div css={s.layout}>
             <div>
@@ -35,16 +85,24 @@ function LoginPage(props) {
                     </div>
                     <div>
                         <div css={s.groupBox}>
-                            <input css={s.textInput} type="text" placeholder='Enter your email address...' />
+                            <input css={s.textInput} type="text" placeholder='Enter your username...'
+                                name="username"
+                                value={inputValue.username}
+                                onChange={handleInputOnChange}
+                            />
                         </div>
                         <div css={s.groupBox}>
-                            <input css={s.textInput} type="password" placeholder='password...' />
+                            <input css={s.textInput} type="password" placeholder='password...'
+                                name="password"
+                                value={inputValue.password}
+                                onChange={handleInputOnChange}
+                            />
                         </div>
                         <p css={s.accountMessage}>
                             계정이 없으시다면 지금 가입하세요. <Link to={"/auth/join"}>회원가입</Link>
                         </p>
                         <div css={s.groupBox}>
-                            <button css={s.accountButton}>Login</button>
+                            <button css={s.accountButton} onClick={handleLoginOnClick}>Login</button>
                         </div>
                     </div>
                 </main>

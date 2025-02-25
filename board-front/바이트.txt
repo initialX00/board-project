@@ -7,10 +7,10 @@ npm create vite@latest
 y
 board-front (프로젝트명)
 react 선택
- javascript+swc 선택
-프로젝트 들어간 뒤 npm install
+javascript+swc 선택
+ 프로젝트 들어간 뒤 npm install
 npm install react-router-dom recoil @tanstack/react-query @emotion/react axios
-react recoil 충돌로 다운그레이드
+ react recoil 충돌로 다운그레이드
 npm install react@18
 npm install react-dom@18
 
@@ -23,12 +23,16 @@ index.jsx가 main.jsx로 변경.
 
 
 
-ㅇ
+ㅇ그외
 npm install react-icons
 
 확장프로그램 VSCode Color Picker
 
 
 
+ㅇsweetalert - alert 창 스타일 변경
+스윗얼럿 이외에도 컴포넌트 등 다른것도 있다.
+promise의 비동기이다.
+동기로 동작 시 async await 필요하다.
 
-
+npm install sweetalert2
