@@ -36,3 +36,13 @@ promise의 비동기이다.
 동기로 동작 시 async await 필요하다.
 
 npm install sweetalert2
+
+
+
+
+ㅇpassword변경
+modal 라이브러리
+$ npm install react-modal
+
+
+

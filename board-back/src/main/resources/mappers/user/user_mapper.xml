@@ -32,9 +32,25 @@
         <result property="credentialsExpired" column="credentials_expired" />
         <result property="accountEnabled" column="account_enabled" />
         <result property="createdAt" column="created_at" />
-        <collection property="userRoles" javaType="java.util.Set" resultMap="userRoleResultMap" />
-        <!--javaType="java.utill.Set" 셋 자료형으로 조인-->
+        <collection property="userRoles" resultMap="userRoleResultMap" />
+        <!--javaType="java.util.Set" 셋 자료형으로 조인-->
     </resultMap>
+
+    <update id="updateProfileImgById">
+        update user_tb
+        set
+            profile_img = #{profileImg}
+        where
+            user_id = #{userId}
+    </update>
+
+    <update id="updateNicknameById">
+        update user_tb
+        set
+            nickname = #{nickname}
+        where
+            user_id = #{userId}
+    </update>
 
     <select id="selectById" resultMap="userResultMap">
         select

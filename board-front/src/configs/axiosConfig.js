@@ -16,4 +16,4 @@ export const setTokenLocalStorage = (name, token) => {
     } else {
         localStorage.removeItem(name);
     }
-}
+};

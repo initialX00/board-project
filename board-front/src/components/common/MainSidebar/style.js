@@ -43,6 +43,23 @@ export const user = css`
     font-size: 1.6rem;
 `;
 
+export const profileImgBox = css`
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1rem;
+    border-radius: 0.5rem;
+    width: 3rem;
+    height: 3rem;
+    background-color: #ffffff;
+    overflow: hidden;
+
+    & > img {
+        width: 100%;
+    }
+`;
+
 export const authText = css`
     display: inline-flex;
     align-items: center;
