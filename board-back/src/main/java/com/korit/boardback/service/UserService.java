@@ -33,6 +33,8 @@ public class UserService {
     private UserRoleRepository userRoleRepository;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private EmailService emailService;
 
     public boolean duplicatedByUsername(String username) {
         return userRepository.findByUsername(username).isPresent();
@@ -55,7 +57,7 @@ public class UserService {
                 .accountExpired(1)
                 .accountLocked(1)
                 .credentialsExpired(1)
-                .accountEnabled(1)
+                .accountEnabled(0)
                 .build();
         userRepository.save(user);
 
@@ -64,6 +66,11 @@ public class UserService {
                 .roleId(1) //원래는 셀렉트로 가져와야댐
                 .build();
         userRoleRepository.save(userRole);
+        try { //트라이캐치에 걸리면 롤백되지 않는다.
+            emailService.sendAuthMail(reqJoinDto.getEmail(), reqJoinDto.getUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return user;
     }
 
@@ -97,4 +104,11 @@ public class UserService {
     public void updateNickname(User user, String nickname) {
         userRepository.updateNickname(user.getUserId(), nickname);
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updatePassword(User user, String password) {
+        String encodePassword = passwordEncoder.encode(password);
+        userRepository.updatePassword(user.getUserId(), encodePassword);
+    }
+
 }

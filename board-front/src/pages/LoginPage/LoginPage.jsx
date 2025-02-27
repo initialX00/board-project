@@ -7,11 +7,12 @@ import { useLoginMutation } from '../../mutations/authMutation';
 import Swal from 'sweetalert2';
 import { setTokenLocalStorage } from '../../configs/axiosConfig';
 import { useUserMeQuery } from '../../queries/userQuery';
+import { useQueryClient } from '@tanstack/react-query';
 
 function LoginPage(props) {
     const navigate = useNavigate();
     const loginMutation = useLoginMutation();
-    const loginUser = useUserMeQuery();
+    const queryClient = useQueryClient();
 
     const [ searchParams, setSearchParams ] = useSearchParams();
     //console.log(searchParams.get("username"));
@@ -43,8 +44,9 @@ function LoginPage(props) {
                 timer: 1000,
                 //원하는 레이어 안에 띄우기 target: 
             });
-            loginUser.refetch();
-            navigate("/");
+            //invalidate는 캐쉬를 unrefresh하게 한다
+            await queryClient.invalidateQueries({queryKey: ["userMeQuery"]}) //promise여서 await가능
+            navigate("/"); //awiat이 아닐경우 비동기로 동작하면서 로그인 시 로그인페이지 -> 홈 -> 로그인페이지로 이동하게된다
         } catch(error) {
             await Swal.fire({ //promise라서 비동기이다
                 title: '로그인실패',

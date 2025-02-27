@@ -24,3 +24,38 @@ java mail sender
 
 ㅇdb
 doard_project 스키마
+
+
+
+
+
+
+
+
+ㅇ야놀시크릿
+spring:
+  config:
+    activate:
+      on-profile: secret
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/board_project
+    username: (db이름)
+    password: (db패스워드)
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: (지메일 아이디)
+    password: (앱 비밀번호)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+
+jwt:
+  secret: 
