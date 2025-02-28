@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import LoginPage from '../../pages/LoginPage/LoginPage';
 import JoinPage from '../../pages/JoinPage/JoinPage';
-import { Route, Routes, useNavigate } from 'react-router-dom';
 import NotFoundPage from '../../pages/NotFoundPage/NotFoundPage';
-import { useUserMeQuery } from '../../queries/userQuery';
 import { useQueryClient } from '@tanstack/react-query';
+import OAuth2LoginPage from '../../pages/OAuth2LoginPage/OAuth2LoginPage';
 
 function AuthRoute(props) {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ function AuthRoute(props) {
 
 
     useEffect(() => {
-        console.log(queryState);
+        //console.log(queryState);
         if(queryState.status === "success") {
             navigate("/"); //정상접속 시 메인페이지로 보내기
         }
@@ -43,11 +43,11 @@ function AuthRoute(props) {
 
     return queryState.status === "error" &&
         <Routes>
+            <Route path="/login/oauth2" element={<OAuth2LoginPage/>} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/join" element={<JoinPage />} />
             <Route path="/*" element={<NotFoundPage />} />
         </Routes>
-
 }
 
 export default AuthRoute;

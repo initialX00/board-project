@@ -61,6 +61,42 @@ export const inputGroup = css`
     }
 `;
 
+export const emailInputAndSendButton = css`
+    display: flex;
+
+    & > input {
+        box-sizing: border-box;
+        outline: none;
+        margin-right: 1rem;
+        border: 0.1rem solid #dbdbdb;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        flex-grow: 1;
+        font-size: 1.4rem;
+        color: #666666;
+        background-color: #fafafa;
+    }
+
+    & > button { 
+        box-sizing: border-box;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1.5rem;
+        background-color: #2383e2;
+        color: #ffffff;
+        cursor: pointer;
+
+        &:active {
+            background-color: #1b65af;
+        }
+
+        &:disabled {
+            background-color: #eeeeee;
+            cursor: default;
+        }
+    }
+`;
+
 export const setButton = css`
     box-sizing: border-box;
     margin-top: 0.5rem;

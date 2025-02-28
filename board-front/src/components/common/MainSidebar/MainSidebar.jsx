@@ -1,9 +1,12 @@
 /**@jsxImportSource @emotion/react */
 import * as s from './style';
+import React from 'react';
 import { FiChevronsLeft } from "react-icons/fi";
 import { basicButton, emptyButton } from '../../../styles/buttons';
 import { useRecoilState } from 'recoil';
 import { mainSidebarIsOpenState } from '../../../atoms/mainSidebar/mainSidebarAtom';
+import { LuLockKeyhole } from "react-icons/lu";
+import { useUserMeQuery } from '../../../queries/userQuery';
 import { useNavigate } from 'react-router-dom';
 import { BiLogOut } from "react-icons/bi";
 import { setTokenLocalStorage } from '../../../configs/axiosConfig';
@@ -14,7 +17,6 @@ function MainSidebar(props) {
     const [ isOpen, setOpen ] = useRecoilState(mainSidebarIsOpenState);
     const queryClient = useQueryClient();
     const loginUserData = queryClient.getQueryData(["userMeQuery"]);
-
     const handleSidebarClose = () => {
         setOpen(false);
     }
@@ -41,7 +43,7 @@ function MainSidebar(props) {
                                         <div css={s.profileImgBox}>
                                             <img src={`http://localhost:8080/image/user/profile/${loginUserData?.data.profileImg}`} alt="" />
                                         </div>
-                                        {loginUserData?.data.nickname}
+                                        <span>{loginUserData?.data.nickname}</span>
                                     </span>
                                 </button>
                             </div>

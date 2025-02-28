@@ -26,7 +26,6 @@ function ValidInput({
         }));
     }
 
-    
     return (
         <div css={s.groupBox}>
             <input css={s.textInput} 

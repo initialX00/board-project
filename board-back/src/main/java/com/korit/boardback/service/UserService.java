@@ -9,8 +9,10 @@ import com.korit.boardback.exception.FieldError;
 import com.korit.boardback.repository.UserRepository;
 import com.korit.boardback.repository.UserRoleRepository;
 import com.korit.boardback.security.jwt.JwtUtil;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,9 +38,16 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
+    public User getUserByUsername(String username) throws Exception {
+        return userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("사용자를 찾지 못했습니다."));
+    }
+
     public boolean duplicatedByUsername(String username) {
         return userRepository.findByUsername(username).isPresent();
     }
+
 
     @Transactional(rollbackFor = Exception.class)
     public User join(ReqJoinDto reqJoinDto) {
@@ -49,6 +58,7 @@ public class UserService {
                     .message("이미 존재하는 사용자이름입니다.")
                     .build()));
         }
+
         User user = User.builder()
                 .username(reqJoinDto.getUsername())
                 .password(passwordEncoder.encode(reqJoinDto.getPassword()))
@@ -66,6 +76,7 @@ public class UserService {
                 .roleId(1) //원래는 셀렉트로 가져와야댐
                 .build();
         userRoleRepository.save(userRole);
+
         try { //트라이캐치에 걸리면 롤백되지 않는다.
             emailService.sendAuthMail(reqJoinDto.getEmail(), reqJoinDto.getUsername());
         } catch (Exception e) {
@@ -83,7 +94,12 @@ public class UserService {
             throw new BadCredentialsException("사용자 정보를 다시 확인하세요.");
         }
 
-        Date expires = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7);
+        // 이메일 인증 여부 확인
+        if(user.getAccountEnabled() == 0) {
+            throw new DisabledException("이메일 인증이 필요합니다.");
+        }
+
+        Date expires = new Date(new Date().getTime() + (1000l * 60 * 60 * 24 * 7));
 
         return jwtUtil.generateToken(
                 user.getUsername(),
@@ -107,8 +123,8 @@ public class UserService {
 
     @Transactional(rollbackFor = Exception.class)
     public void updatePassword(User user, String password) {
-        String encodePassword = passwordEncoder.encode(password);
-        userRepository.updatePassword(user.getUserId(), encodePassword);
+        String encodedPassword = passwordEncoder.encode(password);
+        userRepository.updatePassword(user.getUserId(), encodedPassword);
     }
 
 }

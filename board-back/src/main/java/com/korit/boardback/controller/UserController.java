@@ -59,7 +59,7 @@ public class UserController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
     ) {
-        System.out.println(requestBody.get("password"));
+        //System.out.println(requestBody.get("password"));
         String password = requestBody.get("password");
         userService.updatePassword(principalUser.getUser(), password);
         return ResponseEntity.ok().build();

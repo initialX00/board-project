@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.crypto.Data;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Optional;
@@ -20,9 +21,9 @@ import java.util.Optional;
 @Service
 public class EmailService {
 
-    private final String FROM_EMAIL = "fcs10083@gmail.com";
+    private final String FROM_EMAIL = "skjil1218@gmail.com";
 
-    @Autowired(required = false) //야놀시크릿에서 맞춰주므로 오토와일드가 필요없다
+    @Autowired(required = false)
     private JavaMailSender javaMailSender;
     @Autowired
     private JwtUtil jwtUtil;
@@ -32,22 +33,23 @@ public class EmailService {
     @Async
     public void sendAuthMail(String to, String username) throws MessagingException {
         String emailToken = jwtUtil.generateToken(null, null, new Date(new Date().getTime() + 1000 * 60 * 5));
-        String href = "http://localhost:8080/api/auth/email?username" + username + "&token=" + emailToken;
-        final String SUBJECT = "[board_project] 계정 활성화 인증 메일입니다";
+        String href = "http://localhost:8080/api/auth/email?username=" + username + "&token=" + emailToken;
+
+        final String SUBJECT = "[board_project] 계정 활성화 인증 메일입니다.";
         String content = String.format("""
-                <html lang="ko">
-                <head>
-                    <meta charset="UTF-8">
-                </head>
-                <body>
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <h1>계정 활성화</h1>
-                        <p>계정 활성화를 하시려면 아래의 인증 버튼을 클릭하세요.</p>
-                        <a style="box-sizing: border-box; border: none; border-radius: 8px; padding: 7px 15px; background-color: #2383e2; color: #ffffff; text-decoration: none;" target="_blank" href="%s">인증하기</a>
-                    </div>
-                </body>
-                </html>
-                """, href);
+            <html lang="ko">
+            <head>
+                <meta charset="UTF-8">
+            </head>
+            <body>
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <h1>계정 활성화</h1>
+                <p>계정 활성화를 하시려면 아래의 인증 버튼을 클릭하세요.</p>
+                <a style="box-sizing: border-box; border: none; border-radius: 8px; padding: 7px 15px; background-color: #2383e2; color: #ffffff; text-decoration: none;" target="_blank" href="%s">인증하기</a>
+              </div>
+            </body>
+            </html>
+        """, href);
 
         sendMail(to, SUBJECT, content);
     }
@@ -70,7 +72,7 @@ public class EmailService {
     @Transactional(rollbackFor = Exception.class)
     public String auth(String username, String token) {
         String responseMessage = "";
-        try{
+        try {
             jwtUtil.parseToken(token);
             Optional<User> userOptional = userRepository.findByUsername(username);
             if(userOptional.isEmpty()) {
@@ -84,9 +86,10 @@ public class EmailService {
                     responseMessage = "[인증성공] 인증에 성공하였습니다.";
                 }
             }
-        } catch (Exception e){
-            responseMessage = "[인증실패] 토큰이 유효하지 않거나 인증 시간이 초과하였습니다.";
+        } catch (Exception e) {
+            responseMessage = "[인증실패] 토큰이 유효하지 않거나 인증 시간을 초과하였습니다.";
         }
+
         return responseMessage;
     }
 }

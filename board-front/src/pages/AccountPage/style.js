@@ -96,7 +96,7 @@ export const subContent = css`
     color: #777777;
 `;
 
-export const boarderButton = css`
+export const borderButton = css`
     box-sizing: border-box;
     border: 0.1rem solid #dbdbdb;
     border-radius: 0.5rem;

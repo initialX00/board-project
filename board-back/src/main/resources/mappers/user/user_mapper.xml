@@ -5,7 +5,7 @@
 <mapper namespace="com.korit.boardback.mapper.UserMapper">
 
     <resultMap id="roleResultMap" type="com.korit.boardback.entity.Role">
-        <id property="roleId" column="user_role_id" />
+        <id property="roleId" column="role_id" />
         <result property="roleName" column="role_name" />
         <result property="roleNameKor" column="role_name_kor" />
     </resultMap>
@@ -14,8 +14,7 @@
         <id property="userRoleId" column="user_role_id" />
         <result property="userId" column="urt_user_id" /> <!--겹치는 컬럼명 변경해주기-->
         <result property="roleId" column="urt_role_id" /> <!--겹치는 컬럼명 변경해주기-->
-        <association property="role" column="roleResultMap" />
-
+        <association property="role" resultMap="roleResultMap" />
     </resultMap>
 
     <resultMap id="userResultMap" type="com.korit.boardback.entity.User">
@@ -179,4 +178,5 @@
             now()
         )
     </insert>
+
 </mapper>

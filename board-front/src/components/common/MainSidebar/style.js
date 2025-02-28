@@ -66,8 +66,16 @@ export const profileImgBox = css`
 export const authText = css`
     display: inline-flex;
     align-items: center;
+    width: 20rem;
 
     & > svg {
         margin-right: 0.5rem;
+    }
+    & > span {
+        width: 80%;
+        overflow: hidden;
+        text-overflow: ellipsis; //텍스트 오버플로우 ...으로 처리
+        white-space: nowrap; //줄바꿈 안함
+        text-align: start;
     }
 `;

@@ -7,7 +7,6 @@ import { useUpdatePasswordMutation } from '../../../mutations/accountMutation';
 import Swal from 'sweetalert2';
 
 function PasswordModal({ setOpen }) {
-
     const passwordMutation = useUpdatePasswordMutation();
 
     const [ passwordValue, setPasswordValue ] = useState({
@@ -19,7 +18,7 @@ function PasswordModal({ setOpen }) {
         setPasswordValue(prev => ({
             ...prev,
             [e.target.name]: e.target.value,
-        }))
+        }));
     }
 
     const handleSetButtonOnClick = async () => {
@@ -36,7 +35,7 @@ function PasswordModal({ setOpen }) {
 
     const handleCloseButtonOnClick = () => {
         setOpen(false);
-    }
+    } 
 
     return (
         <div>
@@ -46,7 +45,7 @@ function PasswordModal({ setOpen }) {
             <div css={s.header}>
                 <div css={s.headerIcon}><CgPassword /></div>
                 <h2 css={s.headerTitle}>Set a password</h2>
-                <p>비밀번호는 최소 8자 이상 16자 이하의 영문, 숫자 조합을 사용하세요. </p>
+                <p css={s.headerMessage}>비밀번호는 최소 8자 이상, 또는 16자 이하의 영문, 숫자 조합을 사용하세요.</p>
             </div>
             <div>
                 <div css={s.inputGroup}>
@@ -61,7 +60,8 @@ function PasswordModal({ setOpen }) {
                         value={passwordValue.confirmPassword} 
                         onChange={handlePasswordInputOnChange} />
                 </div>
-                <button css={s.setButton} 
+                <button 
+                    css={s.setButton} 
                     disabled={!passwordValue.newPassword || !passwordValue.confirmPassword}
                     onClick={handleSetButtonOnClick}
                 >Set a password</button>

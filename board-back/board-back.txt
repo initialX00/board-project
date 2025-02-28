@@ -56,6 +56,26 @@ spring:
           timeout: 5000
           starttls:
             enable: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ()
+            client-secret: ()
+          naver:
+            client-id: ()
+            client-secret: ()
 
 jwt:
-  secret: 
+  secret: ()
+
+
+
+
+
+ㅇ야놀시크릿에 적을 로그인 연동 데이터
+네이버 개발자 센터 - 어플리케이션 - 애플리케이션 정보 - 아이디,비번
+구글 클라우드 (gcp) - 콘솔 - 해당 프로젝트 - 클라이언트 - 아이디,비번
+
+네이버 도큐먼트 - 개발가이드 - 3.4네이버 로그인 연동 개발하기 참고

@@ -1,6 +1,5 @@
 package com.korit.boardback.mapper;
 
-
 import com.korit.boardback.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,6 +11,7 @@ public interface UserMapper {
     User selectByEmail(String email);
 
     int insert(User user);
+
     int updateProfileImgById(
             @Param("userId") int userId,
             @Param("profileImg") String profileImg);
@@ -22,5 +22,6 @@ public interface UserMapper {
             @Param("userId") int userId,
             @Param("password") String password);
     int updateAccountEnabledByUsername(
-            @Param("username") String username);
+            @Param("username") String username
+    );
 }
