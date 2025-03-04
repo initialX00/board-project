@@ -32,7 +32,14 @@ public class AuthController {
     @Operation(summary = "로그인", description = "로그인 설명")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody ReqLoginDto dto) {
-        //System.out.println(dto);
+        /**
+         * UserService -> login()
+         * User객체 findByUsername
+         * user가 있으면 비밀번호 일치하는지 확인
+         * 비밀번호가 일치하면 JWT 응답
+         * JwtUtil -> secret 세팅
+         *
+         */
         RespTokenDto respTokenDto = RespTokenDto.builder()
                 .type("JWT")
                 .name("AccessToken")
@@ -56,11 +63,12 @@ public class AuthController {
     ) {
 
         String script = String.format("""
-                <script>
-                    alert("%s");
-                    window.close();
-                </script>
-                """, emailService.auth(username, token));
+            <script>
+                alert("%s");
+                window.close();
+            </script>    
+        """, emailService.auth(username, token));
+
         return ResponseEntity.ok().header("Content-Type", "text/html; charset=utf-8").body(script);
     }
 }

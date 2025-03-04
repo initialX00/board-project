@@ -24,4 +24,8 @@ public interface UserMapper {
     int updateAccountEnabledByUsername(
             @Param("username") String username
     );
+    int updateEmailById(
+            @Param("userId") int useId,
+            @Param("email") String email
+    );
 }

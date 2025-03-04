@@ -54,9 +54,9 @@ public class UserService {
         if(duplicatedByUsername(reqJoinDto.getUsername())) {
             throw new DuplicatedValueException(
                     List.of(FieldError.builder()
-                    .field("username")
-                    .message("이미 존재하는 사용자이름입니다.")
-                    .build()));
+                        .field("username")
+                        .message("이미 존재하는 사용자이름입니다.")
+                        .build()));
         }
 
         User user = User.builder()
@@ -125,6 +125,11 @@ public class UserService {
     public void updatePassword(User user, String password) {
         String encodedPassword = passwordEncoder.encode(password);
         userRepository.updatePassword(user.getUserId(), encodedPassword);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateEmail(User user, String email) {
+        userRepository.updateEmail(user.getUserId(), email);
     }
 
 }

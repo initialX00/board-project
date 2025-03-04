@@ -29,12 +29,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     @Override
     @Transactional(rollbackFor = Exception.class)
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        //System.out.println(getDefaultOauth2User(userRequest));
         String email = null;
         String oauth2Name = null;
         String oauth2Provider = userRequest.getClientRegistration().getRegistrationId();
-        System.out.println(oauth2Provider);
-        Map<String, Object> attributes = getDefaultOauth2User(userRequest).getAttributes();
+        Map<String, Object> attributes = getDefaultOAuth2User(userRequest).getAttributes();
         if(oauth2Provider.equalsIgnoreCase("naver")) {
             attributes = (Map<String, Object>) attributes.get("response");
             oauth2Name = (String) attributes.get("id");
@@ -79,7 +77,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .build();
     }
 
-    private OAuth2User getDefaultOauth2User(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+    private OAuth2User getDefaultOAuth2User(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         return defaultOAuth2UserService.loadUser(userRequest);
     }
 }

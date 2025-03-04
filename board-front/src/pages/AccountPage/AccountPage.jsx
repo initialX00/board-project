@@ -6,8 +6,8 @@ import { useUserMeQuery } from '../../queries/userQuery';
 import * as s from './style';
 import React, { useEffect, useRef, useState } from 'react';
 import PasswordModal from '../../components/auth/PasswordModal/PasswordModal';
-import ChangeEmailModal from '../../components/auth/ChangeEmailModal/ChangeEmailModal';
 import { useQueryClient } from '@tanstack/react-query';
+import ChangeEmailModal from '../../components/auth/ChangeEmailModal/ChangeEmailModal';
 
 function AccountPage(props) {
     const loginUser = useUserMeQuery();

@@ -20,6 +20,8 @@ export const sidebarOpenButton = css`
 `;
 
 export const main = css`
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
     padding: 0.6rem;
     flex-grow: 1;

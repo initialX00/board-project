@@ -24,6 +24,7 @@ export const container = css`
 `;
 
 export const groupLayout = css`
+    position: relative;
     box-sizing: border-box;
     border-radius: 0.7rem;
     padding: 0.6rem;
@@ -77,5 +78,37 @@ export const authText = css`
         text-overflow: ellipsis; //텍스트 오버플로우 ...으로 처리
         white-space: nowrap; //줄바꿈 안함
         text-align: start;
+    }
+`;
+
+export const categoryText = css`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+`;
+
+export const writeButton = css`
+    position: absolute;
+    right: 0.6rem;
+    top: 0.4rem;
+`;
+
+export const categoryListContainer = css`
+    flex-grow: 1;
+    overflow-y: auto;
+`;
+
+export const categoryItem = css`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    & > button:nth-of-type(2) {
+        opacity: 0;
+    }
+
+    &:hover > button:nth-of-type(2) { //버튼 올렸을때만 활성화
+        opacity: 1;
     }
 `;

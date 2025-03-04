@@ -1,8 +1,10 @@
 package com.korit.boardback.controller;
 
 import com.korit.boardback.security.principal.PrincipalUser;
+import com.korit.boardback.service.EmailService;
 import com.korit.boardback.service.FileService;
 import com.korit.boardback.service.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,13 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
-
 @RestController
 @RequestMapping("/api")
 public class UserController {
-
+//board_category_id , name
     @Autowired
     private UserService userService;
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("/user/me")
     public ResponseEntity<?> getLoginUser(@AuthenticationPrincipal PrincipalUser principalUser) {
@@ -48,7 +51,7 @@ public class UserController {
             @AuthenticationPrincipal PrincipalUser principalUser,
             @RequestBody Map<String, String> requestBody
     ) {
-        System.out.println(requestBody.get("nickname"));
+        //System.out.println(requestBody.get("nickname"));
         String nickname = requestBody.get("nickname");
         userService.updateNickname(principalUser.getUser(), nickname);
         return ResponseEntity.ok().build();
@@ -62,6 +65,26 @@ public class UserController {
         //System.out.println(requestBody.get("password"));
         String password = requestBody.get("password");
         userService.updatePassword(principalUser.getUser(), password);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/user/profile/email/send")
+    public ResponseEntity<?> sendEmailChangeVerification(
+            @RequestBody Map<String, String> requestBody
+    ) throws MessagingException {
+        String email = requestBody.get("email");
+        String code = emailService.generateEmailCode();
+        emailService.sendChangeEmailVerification(email, code);
+        return ResponseEntity.ok().body(code);
+    }
+
+    @PutMapping("/user/profile/email")
+    public ResponseEntity<?> changeEmail(
+            @AuthenticationPrincipal PrincipalUser principalUser,
+            @RequestBody Map<String, String> requestBody
+    ) {
+        String email = requestBody.get("email");
+        userService.updateEmail(principalUser.getUser(), email);
         return ResponseEntity.ok().build();
     }
 }

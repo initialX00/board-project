@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.korit.boardback.mapper.BoardCategoryMapper">
+    <resultMap id="boardCategoryResultMap" type="com.korit.boardback.entity.BoardCategory">
+        <id property="boardCategoryId" column="board_category_id" />
+        <result property="boardCategoryName" column="board_category_name" />
+    </resultMap>
+
+    <insert id="insertBoardCategory" keyProperty="boardCategoryId" useGeneratedKeys="true">
+        insert into board_category_tb
+        values(default, #{boardCategoryName})
+    </insert>
+
+    <select id="selectBoardCategoryByName" resultMap="boardCategoryResultMap">
+        select
+            board_category_id,
+            board_category_name,
+        from
+            board_category_tb
+        where
+            board_category_name = #{boardCategoryName}
+    </select>
+
+    <select id="selectBoardCategoryAndBoardCountByUserId"
+            resultType="com.korit.boardback.entity.BoardCategoryAndBoardCount">
+        select
+            bct.board_category_id as boardCategoryId,
+            bct.board_category_name as CategoryName,
+            (select count(*) from board_tb where board_category_id = bct.board_category_id) as boardCount
+        from
+            board_category_tb bct
+            inner join board_tb bt on(bt.board-category_id = bct.board_category_id)
+        where
+            bt.user_id = #{userId}
+        group by
+            bct.board_category_id,
+            bct.board_category_name
+    </select>
+</mapper>
