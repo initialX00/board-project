@@ -4,9 +4,61 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.korit.boardback.mapper.BoardMapper">
 
-
     <insert id="insertBoard" keyProperty="boardId" useGeneratedKeys="true">
         insert into board_tb
         values(default, #{boardCategoryId}, #{userId}, #{title}, #{content}, 0, now(), now())
     </insert>
+
+    <select id="selectBoardListAllBySearchOption" resultType="com.korit.boardback.entity.BoardSearch">
+        select
+            bt.board_id as boardId,
+            bt.title,
+            bct.board_category_name as boardCategoryName,
+            ut.profile_img as profileImg,
+            ut.nickname,
+            bt.view_count as viewCount,
+            (select count(*) from board_like_tb where board_id = bt.board_id) as likeCount,
+            bt.created_at as createdAt
+        from
+            board_tb bt
+            inner join board_category_tb bct on(bct.board_category_id = bt.board_category_id)
+            inner join user_tb ut on(ut.user_id = bt.user_id)
+        <where> <!--where태크 안의 참인 조건을 알아서 찾는다-->
+            <if test="searchText != null and searchText != ''">
+                title like concat("%", #{searchText}, "%")
+            </if>
+        </where>
+        order by
+            <choose>
+                <when test="order == 'oldest'">
+                    boardId asc,
+                </when>
+                <when test="order == 'viewDesc'">
+                    viewCount desc,
+                </when>
+                <when test="order == 'viewAsc'">
+                    viewCount asc,
+                </when>
+                <when test="order == 'likesDesc'">
+                    likeCount desc,
+                </when>
+                <when test="order == 'likesAsc'">
+                    likeCount asc,
+                </when>
+            </choose>
+            boardId desc <!--기본값, 상단에 있을 수록 우선 순위가 높기때문에 boardId asc가 걸려도 desc되지 않는다-->
+        limit #{startIndex}, #{limitCount}
+    </select>
+
+    <select id="selectBoardCountAllBySearchText" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            board_tb
+        <where>
+            <if test="searchText != null and searchText != ''">
+                title like concat("%", #{searchText}, "%")
+            </if>
+        </where>
+    </select>
 </mapper>

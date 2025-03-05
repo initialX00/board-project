@@ -66,6 +66,7 @@
         where
             username = #{username}
     </update>
+
     <update id="updateEmailById">
         update user_tb
         set

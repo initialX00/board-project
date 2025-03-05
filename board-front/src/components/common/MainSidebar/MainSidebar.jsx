@@ -35,18 +35,23 @@ function MainSidebar(props) {
         navigate("/auth/login");
     } //removeQuery는 객체를 지우고 재요청을 하지 않는다.
 
-    const handleWriteOnClick = async () => {
-        const categoryData = await Swal.fire({
-            title: "카테고리명을 입력하세요",
-            input: "text",
-            inputPlaceholder: "Enter category name",
-            showCancelButton: true,
-            confirmButtonText: "작성하기",
-            cancelButtonText: "취소하기",
-        });
-        if(categoryData.isConfirmed) {
-            navigate(`/board/write/${categoryData.value}`);
+    const handleWriteOnClick = async (categoryName) => {
+        if(!categoryName) {
+            const categoryData = await Swal.fire({
+                title: "카테고리명을 입력하세요",
+                input: "text",
+                inputPlaceholder: "Enter category name",
+                showCancelButton: true,
+                confirmButtonText: "작성하기",
+                cancelButtonText: "취소하기",
+            });
+            if(categoryData.isConfirmed) {
+                categoryName = categoryData.value;
+            } else {
+                return;
+            }
         }
+        navigate(`/board/write/${categoryName}`);
     }
     
     return (
@@ -84,8 +89,8 @@ function MainSidebar(props) {
                     </div>
                     <div css={s.groupLayout}>
                         <div css={s.categoryItem}>
-                            <button css={emptyButton}>내가 작성한 글</button>
-                            <button css={basicButton} onClick={handleWriteOnClick}><BiEdit /></button>
+                            <button css={emptyButton}>내가 작성한 글({categories.isLoading || categories.data.data.reduce((prev, category) => {prev + category.boardCount}, 0)})</button>
+                            <button css={basicButton} onClick={() => handleWriteOnClick(null)}><BiEdit /></button>
                         </div>
                     </div>
                 </div>
@@ -93,10 +98,10 @@ function MainSidebar(props) {
                     {
                         categories.isLoading ||
                         categories.data.data.map(category =>
-                            <div css={s.groupLayout}>
+                            <div key={category.boardCategoryId} css={s.groupLayout}>
                                 <div css={s.categoryItem}>
                                     <button css={emptyButton}>{category.boardCategoryName}({category.boardCount})</button>
-                                    <button css={emptyButton}><BiEdit /></button>
+                                    <button css={basicButton} onClick={() => handleWriteOnClick(category.boardCategoryName)}><BiEdit /></button>
                                 </div>
                             </div>
                         )

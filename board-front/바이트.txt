@@ -87,11 +87,11 @@ promise (() => {
 
 
 
+ㅇreact select
+npm i --save react-select
+react select 홈페이지에서 참고
 
 
 
 
-##emil변경오류, 타이머오류
-##게시글 등록 오류
-
-
+##홈페이지 켰을때 에러

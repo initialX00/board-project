@@ -4,13 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { RiCloseCircleFill } from "react-icons/ri";
 import { CgMail } from "react-icons/cg";
 import Swal from 'sweetalert2';
-import { useSendVerifyEamilMutaion, useUpdateEmailMutation } from '../../../mutations/accountMutation';
-import { QueryClient, useQueryClient } from '@tanstack/react-query';
+import { useSendVerifyEmailMutation, useUpdateEmailMutation } from '../../../mutations/accountMutation';
+import { useQueryClient } from '@tanstack/react-query';
 
 function ChangeEmailModal({ setOpen }) {
     const quryClient = useQueryClient();
     const updateEmailMutation = useUpdateEmailMutation();
-    const verifyEmailMutation = useSendVerifyEamilMutaion();
+    const verifyEmailMutation = useSendVerifyEmailMutation();
     const [ emailValue, setEmailValue ] = useState("");
     const [ time, setTime ] = useState(60 * 5);
     const [ isSend, setSend ] = useState(false);
@@ -26,7 +26,7 @@ function ChangeEmailModal({ setOpen }) {
     const [ verifyCode, setVerifyCode ] = useState("");
 
     useEffect(() => {
-        const timer = setinterval(() => { //1초마다 1초 감소
+        const timer = setInterval(() => { //1초마다 1초 감소
             setTime(prev => prev > 0 ? prev - 1 : 0);
         }, 1000);
         return () => {

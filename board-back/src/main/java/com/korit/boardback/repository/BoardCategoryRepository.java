@@ -2,7 +2,9 @@ package com.korit.boardback.repository;
 
 import com.korit.boardback.entity.BoardCategory;
 import com.korit.boardback.entity.BoardCategoryAndBoardCount;
+import com.korit.boardback.entity.BoardSearch;
 import com.korit.boardback.mapper.BoardCategoryMapper;
+import com.korit.boardback.mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +16,8 @@ public class BoardCategoryRepository {
 
     @Autowired
     private BoardCategoryMapper boardCategoryMapper;
+    @Autowired
+    private BoardMapper boardMapper;
 
     public BoardCategory save(BoardCategory boardCategory) {
         boardCategoryMapper.insertBoardCategory(boardCategory);
@@ -27,4 +31,5 @@ public class BoardCategoryRepository {
     public List<BoardCategoryAndBoardCount> findAllByUserId(int userId) {
         return boardCategoryMapper.selectBoardCategoryAndBoardCountByUserId(userId);
     }
+
 }
