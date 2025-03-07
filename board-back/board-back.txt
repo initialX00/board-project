@@ -68,7 +68,7 @@ spring:
             client-secret: (앱 시크릿)
 
 jwt:
-  secret: (jwt generator)
+  secret: (jwt secret)
 
 
 
