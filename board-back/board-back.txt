@@ -61,14 +61,14 @@ spring:
       client:
         registration:
           google:
-            client-id: ()
-            client-secret: ()
+            client-id: (앱 아이디)
+            client-secret: (앱 시크릿)
           naver:
-            client-id: ()
-            client-secret: ()
+            client-id: (앱 아이디)
+            client-secret: (앱 시크릿)
 
 jwt:
-  secret: ()
+  secret: (jwt generator)
 
 
 
