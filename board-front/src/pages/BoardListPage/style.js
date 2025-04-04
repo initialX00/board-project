@@ -31,7 +31,6 @@ export const searchItems = css`
 export const searchInputBox = css`
     position: relative;
     margin-left: 1rem;
-    height: 3rem;
 
     & > input {
         box-sizing: border-box;
@@ -70,7 +69,7 @@ export const boardListContainer = css`
         align-items: center;
         height: 3rem;
         cursor: default;
-
+        
         &:not(:nth-of-type(1)):hover {
             border-radius: 0.7rem;
             background-color: #eeeeee;
@@ -142,7 +141,6 @@ export const boardWriter = css`
 export const boardCounts = css`
     display: flex;
 
-
     & > span {
         position: relative;
         margin-right: 1rem;
@@ -152,7 +150,7 @@ export const boardCounts = css`
             display: block;
         }
 
-        & span {
+        & > span {
             display: none;
             position: absolute;
             transform: translateX(-50%);
@@ -175,7 +173,7 @@ export const pageNumbers = css`
     display: flex;
     width: 25rem;
 
-    & > div {
+    & > button {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -188,8 +186,13 @@ export const pageNumbers = css`
         font-weight: 600;
         font-size: 1.2rem;
         cursor: pointer;
+        background-color: #ffffff;
 
         &:hover {
+            background-color: #eeeeee;
+        }
+
+        &:disabled {
             background-color: #fafafa;
         }
 
@@ -200,5 +203,7 @@ export const pageNumbers = css`
 `;
 
 export const pageNum = (isSelect) => css`
-    background-color: ${isSelect ? "#eeeeee" : "#ffffff"};
+    background-color: ${isSelect ? "#eeeeee" : "#ffffff"} !important;
+    //우선 순위가 낮아서 색칠이 안된다. important로 우선순위 부여.
+    //important는 가능한 안 쓰는게 좋다. nth로 좌<우>버튼만 흰색으로 칠하면된다.
 `;

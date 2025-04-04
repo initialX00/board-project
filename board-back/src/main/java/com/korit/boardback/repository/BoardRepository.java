@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 
@@ -21,12 +22,24 @@ public class BoardRepository {
     }
 
     public List<BoardSearch> findBoardListAllBySearchOption(
-            int startIndex, int limitSize, String order, String searchText
-    ) {
+            int startIndex,
+            int limitSize,
+            String order,
+            String searchText) {
         return boardMapper.selectBoardListAllBySearchOption(startIndex, limitSize, order, searchText);
     }
 
     public int findBoardCountAllBySearchText(String searchText) {
         return boardMapper.selectBoardCountAllBySearchText(searchText);
+    }
+
+    public List<BoardSearch> findBoardListAllByUserIdAndCategoryNameAndSearchOption(
+            int userId, String categoryName, int startIndex, int limitCount
+    ) {
+        return boardMapper.selectBoardListAllByUserIdAndCategoryNameAndSearchOption(userId, categoryName, startIndex, limitCount);
+    }
+
+    public int findBoardCategoryCountByUserIdAndCategoryName(int userId, String categoryName) {
+        return boardMapper.selectBoardCategoryCountAllByUserIdAndCategoryName(userId, categoryName);
     }
 }

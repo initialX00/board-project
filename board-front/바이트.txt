@@ -52,6 +52,7 @@ $ npm install react-modal
 
 구글 계정 설정 - 앱 비밀번호으
  여해여 요여테 유토에 유우들
+ ugou yuxp bxhp bnef
 
 g메일-  모든설정 - 전달 및 pop/imap
  모든메일에 pop사용
@@ -90,6 +91,18 @@ promise (() => {
 ㅇreact select
 npm i --save react-select
 react select 홈페이지에서 참고
+
+
+
+
+ㅇhtml 주소창 ?뒤의 파라미터 확인하기
+html network에서 payload정보 확인
+network와 주소창에서의 값 일치하는지 확인
+?뒤의 파라미터 값이 상태값이여서 검색,정렬 이후 값이 사라진다.
+
+ㅇ페이지 초기화
+검색,정렬 후 페이지가 다시 1페이지가 오도록 한다.
+
 
 
 

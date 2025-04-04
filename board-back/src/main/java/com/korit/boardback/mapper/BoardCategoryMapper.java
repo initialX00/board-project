@@ -4,6 +4,7 @@ import com.korit.boardback.entity.BoardCategory;
 import com.korit.boardback.entity.BoardCategoryAndBoardCount;
 import org.apache.ibatis.annotations.Mapper;
 
+
 import java.util.List;
 
 @Mapper

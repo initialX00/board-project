@@ -61,4 +61,40 @@
             </if>
         </where>
     </select>
+
+    <select id="selectBoardListAllByUserIdAndCategoryNameAndSearchOption"
+            resultType="com.korit.boardback.entity.BoardSearch">
+        select
+            bt.board_id as boardId,
+            bt.title,
+            bct.board_category_name as boardCategoryName,
+            ut.profile_img as profileImg,
+            ut.nickname,
+            bt.view_count as viewCount,
+            (select count(*) from board_like_tb where board_id = bt.board_id) as likeCount,
+            bt.created_at as createdAt
+        from
+            board_tb bt
+            inner join board_category_tb bct on(bct.board_category_id = bt.board_category_id)
+            inner join user_tb ut on(ut.user_id = bt.user_id)
+        where
+            bct.board_category_name = #{categoryName}
+            and ut.user_id = #{userId}
+        order by
+            boardId desc
+        limit #{startIndex}, #{limitCount}
+    </select>
+
+    <select id="selectBoardCategoryCountAllByUserIdAndCategoryName"
+            resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            board_tb bt
+            inner join board_category_tb bct on(bct.board_category_id = bt.board_category_id)
+            inner join user_tb ut on(ut.user_id = bt.user_id)
+        where
+            bct.board_category_name = #{categoryName}
+            and ut.user_id = #{userId}
+    </select>
 </mapper>

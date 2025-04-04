@@ -59,7 +59,11 @@ public class SecurityConfig {
         }); //접속 오류 시 다시 요청될 계정 연동 주소를 403으로 설정
 
         http.authorizeHttpRequests(authorizeRequests -> {
-            authorizeRequests.requestMatchers("/api/auth/**", "/image/**").permitAll();
+            authorizeRequests.requestMatchers(
+                    "/api/auth/**",
+                    "/api/user/**",
+                    "/api/board/**",
+                    "/image/**").permitAll();
             authorizeRequests.anyRequest().authenticated();
         });
 
