@@ -23,12 +23,14 @@ public class AuthController {
     @Autowired
     private EmailService emailService;
 
+    //회원가입
     @Operation(summary = "회원가입", description = "회원가입 설명")
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody ReqJoinDto dto) {
-        return ResponseEntity.ok().body(userService.join(dto));
+        return ResponseEntity.ok().body(userService.join(dto)); //회원가입 후 성공응답
     }
 
+    //로그인
     @Operation(summary = "로그인", description = "로그인 설명")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody ReqLoginDto dto) {
@@ -41,21 +43,23 @@ public class AuthController {
          *
          */
         RespTokenDto respTokenDto = RespTokenDto.builder()
-                .type("JWT")
-                .name("AccessToken")
-                .token(userService.login(dto))
+                .type("JWT") //토큰설정
+                .name("AccessToken") //토큰이름설정
+                .token(userService.login(dto)) //토큰 생성
                 .build();
 
-        return ResponseEntity.ok().body(respTokenDto);
+        return ResponseEntity.ok().body(respTokenDto); //응답으로 jwt반환
     }
 
+    //인증 이메일 발송
     @PostMapping("/email")
     public ResponseEntity<?> sendAuthEmail(@RequestBody ReqAuthEmailDto dto) throws Exception {
-        User user = userService.getUserByUsername(dto.getUsername());
-        emailService.sendAuthMail(user.getEmail(), dto.getUsername());
-        return ResponseEntity.ok().build();
+        User user = userService.getUserByUsername(dto.getUsername()); //사용자 정보조회
+        emailService.sendAuthMail(user.getEmail(), dto.getUsername()); //이메일 발송
+        return ResponseEntity.ok().build(); //이메일 전송 후 성공 응답
     }
 
+    //인증 메일 처리
     @GetMapping("/email")
     public ResponseEntity<?> setAuthMail(
             @RequestParam String username,
@@ -68,7 +72,9 @@ public class AuthController {
                 window.close();
             </script>    
         """, emailService.auth(username, token));
+        // emailService.auth()로 인증을 처리하고 그 결과 메시지를 알림으로 표시
 
+        // 응답으로 HTML 스크립트를 반환하여 인증 결과를 사용자에게 보여주기
         return ResponseEntity.ok().header("Content-Type", "text/html; charset=utf-8").body(script);
     }
 }

@@ -25,17 +25,20 @@ public class EmailService {
     private final String FROM_EMAIL = "skjil1218@gmail.com";
 
     @Autowired(required = false)
-    private JavaMailSender javaMailSender;
+    private JavaMailSender javaMailSender; //이메일을 보내는데 사용되는 양식
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtUtil jwtUtil; //JWT토큰을 생성
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepository; //사용자 정보 관리
 
-    @Async
+    @Async //이메일을 비동기로 발송, 이메일 처리에 시간이 걸리므로 비동기 처리
     public void sendAuthMail(String to, String username) throws MessagingException {
+        //인증용 이메일 토큰 생성
         String emailToken = jwtUtil.generateToken(null, null, new Date(new Date().getTime() + 1000 * 60 * 5));
+        //인즈용 링크 생성
         String href = "http://localhost:8080/api/auth/email?username=" + username + "&token=" + emailToken;
 
+        //이메일 제목 및 내용 (HTML형식)
         final String SUBJECT = "[board_project] 계정 활성화 인증 메일입니다.";
         String content = String.format("""
             <html lang="ko">
@@ -52,29 +55,35 @@ public class EmailService {
             </html>
         """, href);
 
-        sendMail(to, SUBJECT, content);
+        sendMail(to, SUBJECT, content); //이메일 발송
     }
 
 
+    //이메일 발송 메서드
     //@Value("${spring.mail.username}") => FROM_EMAIL로 대체
     public void sendMail(String to, String subject, String content) throws MessagingException {
+        //MimeMessage객체는 이메일 전송에 사용되는 정보를 나타낸다.
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, StandardCharsets.UTF_8.name());
-        mimeMessageHelper.setFrom(FROM_EMAIL);
-        mimeMessageHelper.setTo(to);
-        mimeMessageHelper.setSubject(subject);
-        mimeMessage.setText(content, StandardCharsets.UTF_8.name(), "html");
+        mimeMessageHelper.setFrom(FROM_EMAIL); //발신자 설정
+        mimeMessageHelper.setTo(to); //수신자 설정
+        mimeMessageHelper.setSubject(subject); //제목 설정
+        mimeMessage.setText(content, StandardCharsets.UTF_8.name(), "html"); //본문 내용 설정
 
-        javaMailSender.send(mimeMessage);
+        javaMailSender.send(mimeMessage); //이메일 전송
     }
 
+    //이메일 인증 메서드
     @Transactional(rollbackFor = Exception.class)
     public String auth(String username, String token) {
         String responseMessage = "";
         try {
+            //받은 토큰을 파싱하여 검증
             jwtUtil.parseToken(token);
+            //사용자 이름을 통해 사용자 정보 조회
             Optional<User> userOptional = userRepository.findByUsername(username);
+
             if(userOptional.isEmpty()) {
                 responseMessage = "[인증실패] 존재하지 않는 사용자입니다.";
             } else {
@@ -93,13 +102,16 @@ public class EmailService {
         return responseMessage;
     }
 
+    //이메일 인증 코드 생성
     public String generateEmailCode() {
         Random random = new Random();
         return String.valueOf(random.nextInt(1000000));
     }
 
+    //이메일 변경 메서드
     @Async
     public void sendChangeEmailVerification(String to, String code) throws MessagingException {
+       //이메일 제목 및 내용 (HTML형식)
         String SUBJECT = "[board_project] 이메일 변경을 위한 사용자 인증 메일입니다.";
         String content = String.format("""
             <html lang="ko">
@@ -116,6 +128,6 @@ public class EmailService {
             </html>
         """, code);
 
-        sendMail(to, SUBJECT, content);
+        sendMail(to, SUBJECT, content); //이메일 발송
     }
 }
